@@ -2,8 +2,8 @@ from django.test import TestCase
 from rekam_medis.models import Pasien
 
 
-class PasienModelTest(TestCase):
-    def test_pasien_model(self):
+class PasienModelTestCase(TestCase):
+    def test_pasien_model_str(self):
         pasien = Pasien.objects.create(
             nama='Dimas',
             nama_kk='Dimas',

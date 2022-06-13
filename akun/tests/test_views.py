@@ -5,7 +5,7 @@ from rest_framework.test import APITestCase
 from akun.models import Pengguna
 
 
-class AkunTest(APITestCase):
+class AkunAPITestCase(APITestCase):
     def setUp(self):
         self.user_data = {'username': 'dimas', 'password': 'd'}
         Pengguna.objects.create_user(**self.user_data)
