@@ -1,10 +1,7 @@
-import json
-
-from django.test import TestCase
-from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APIRequestFactory, APITestCase
+from rest_framework.test import APITestCase
 
+from akun.models import Pengguna
 from rekam_medis.models import Pasien
 from rekam_medis.serializers import PasienSerializer
 
@@ -13,6 +10,10 @@ class PasienTest(APITestCase):
     url = '/rekam_medis/pasien/'
 
     def setUp(self):
+        login_data = {'username': 'dimas', 'password': 'd'}
+        Pengguna.objects.create_user(**login_data)
+        self.client.login(**login_data)
+
         Pasien.objects.create(
             nama='Dimas',
             nama_kk='Dimas',
