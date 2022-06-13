@@ -1,0 +1,9 @@
+[report]
+show_missing = true
+omit =
+    ./manage.py
+    praktekiin/asgi.py
+    praktekiin/wsgi.py
+    */admin.py
+    */apps.py
+    */migrations/*

@@ -11,6 +11,3 @@ class Pengguna(AbstractUser):
 
     role = models.CharField(
         max_length=2, blank=True, choices=Role.choices, default=Role.PASIEN)
-
-    def __str__(self):
-        return self.username
