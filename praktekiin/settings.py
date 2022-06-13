@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'akun',
     'rekam_medis',
 ]
 
@@ -81,6 +82,10 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+# Custom User
+AUTH_USER_MODEL = 'akun.Pengguna'
 
 
 # Password validation
