@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure--*jarx8k$fg%i=2mr5+b&(yir6^d-1l(0qg(*y5fm%q&&%l#if
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -89,9 +89,9 @@ DATABASES = {
 
 PRODUCTION = os.environ.get('DATABASE_URL') is not None
 if PRODUCTION:
-    DEBUG = False
+    # DEBUG = False
     DATABASES['default'] = dj_database_url.config()
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+    # ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
     # SOCIAL_AUTH_POSTGRES_JSONFIELD = True
     # SECURE_SSL_REDIRECT = True
 
