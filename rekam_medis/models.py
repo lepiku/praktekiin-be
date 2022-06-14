@@ -15,5 +15,12 @@ class Pasien(models.Model):
         max_length=1, choices=JenisKelamin.choices)
     no_telp = models.CharField(max_length=20, blank=True)
 
+    dibuat_oleh = models.ForeignKey(
+        'akun.Pengguna',
+        related_name='membuat_pasien',
+        null=True,
+        on_delete=models.SET_NULL)
+    waktu_dibuat = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return self.nama

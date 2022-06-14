@@ -1,4 +1,5 @@
-from rest_framework import viewsets
+from rest_framework import status, viewsets
+from rest_framework.response import Response
 
 from rekam_medis.models import Pasien
 from rekam_medis.serializers import PasienSerializer
@@ -7,3 +8,23 @@ from rekam_medis.serializers import PasienSerializer
 class PasienViewSet(viewsets.ModelViewSet):
     queryset = Pasien.objects.all()
     serializer_class = PasienSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        pasien = serializer.instance
+        pasien.dibuat_oleh = request.user
+        pasien.save()
+        serializer = self.get_serializer(pasien)
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.dibuat_oleh is None:
+            instance.dibuat_oleh = request.user
+        instance.save()
+        return super().update(request, *args, **kwargs)
