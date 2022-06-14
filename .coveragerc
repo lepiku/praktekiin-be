@@ -3,6 +3,7 @@ show_missing = true
 omit =
     ./manage.py
     praktekiin/asgi.py
+    praktekiin/settings.py
     praktekiin/wsgi.py
     */admin.py
     */apps.py

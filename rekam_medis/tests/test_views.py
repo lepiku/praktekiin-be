@@ -20,6 +20,7 @@ class PasienAPITestCase(APITestCase):
             alamat='Depok',
             pekerjaan='Mahasiswa',
             tanggal_lahir='2000-01-01',
+            jenis_kelamin='L',
             no_telp='0123456789012',
         )
 
@@ -37,6 +38,7 @@ class PasienAPITestCase(APITestCase):
             'alamat': 'Depok',
             'pekerjaan': 'Mahasiswa',
             'tanggal_lahir': '2000-01-01',
+            'jenis_kelamin': 'P',
             'no_telp': '0123456789012',
         }
 
@@ -62,6 +64,7 @@ class PasienAPITestCase(APITestCase):
             'alamat': 'Depok',
             'pekerjaan': 'PNS',
             'tanggal_lahir': '2000-01-01',
+            'jenis_kelamin': 'L',
             'no_telp': '0123456789012',
         }
         response = self.client.put(self.url + '1/', data)
