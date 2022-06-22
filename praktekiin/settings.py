@@ -14,21 +14,36 @@ import os
 from pathlib import Path
 
 import dj_database_url
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# environment variables
+env = environ.Env(
+    DATABASE_URL=(str, None),
+    DJANGO_CLIENT_ORIGINS=str,
+    DJANGO_DEBUG=(bool, False),
+    DJANGO_HOSTS=str,
+    DJANGO_PRODUCTION=(bool, False),
+    DJANGO_SECRET_KEY=str,
+)
+env_path = (BASE_DIR / '.env').as_posix()
+if os.path.exists(env_path):
+    environ.Env.read_env(env_path)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--*jarx8k$fg%i=2mr5+b&(yir6^d-1l(0qg(*y5fm%q&&%l#if'
+SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DJANGO_DEBUG')
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = env('DJANGO_HOSTS').split(';')
+
+CORS_ALLOWED_ORIGINS = env('DJANGO_CLIENT_ORIGINS').split(';')
 
 
 # Application definition
@@ -42,12 +57,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
     'akun',
     'rekam_medis',
 ]
 
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -82,19 +99,13 @@ WSGI_APPLICATION = 'praktekiin.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        'DATABASE_URL',
+        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}')
 }
 
-PRODUCTION = os.environ.get('DATABASE_URL') is not None
-if PRODUCTION:
-    # DEBUG = False
-    DATABASES['default'] = dj_database_url.config()
-    # ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
-    # SOCIAL_AUTH_POSTGRES_JSONFIELD = True
-    # SECURE_SSL_REDIRECT = True
+if env('DJANGO_PRODUCTION'):
+    SECURE_SSL_REDIRECT = True
 
 
 # Password validation
@@ -121,7 +132,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Jakarta'
 
 USE_I18N = True
 
