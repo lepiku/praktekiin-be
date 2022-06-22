@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import sys
 import os
 from pathlib import Path
 
@@ -28,9 +29,13 @@ env = environ.Env(
     DJANGO_PRODUCTION=(bool, False),
     DJANGO_SECRET_KEY=str,
 )
-env_path = (BASE_DIR / '.env').as_posix()
-if os.path.exists(env_path):
-    environ.Env.read_env(env_path)
+ENV_PATH = (BASE_DIR / '.env').as_posix()
+TESTING = sys.argv[1] == 'test'
+if TESTING:
+    environ.Env.read_env((BASE_DIR / '.env.test').as_posix())
+elif os.path.exists(ENV_PATH):
+    environ.Env.read_env(ENV_PATH)
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/

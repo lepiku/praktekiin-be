@@ -51,7 +51,7 @@ class PasienAPITestCase(APITestCase):
 
         data['id'] = 2
         data['dibuat_oleh'] = self.pengguna.id
-        data['waktu_dibuat'] = now.isoformat()[:-6] + 'Z'
+        data['waktu_dibuat'] = now.astimezone().isoformat()
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data, data)
@@ -76,7 +76,7 @@ class PasienAPITestCase(APITestCase):
         }
 
         waktu_dibuat = Pasien.objects.get(
-            id=1).waktu_dibuat.isoformat()[:-6] + 'Z'
+            id=1).waktu_dibuat.astimezone().isoformat()
 
         response = self.client.put(self.url + '1/', data)
         data['id'] = 1
@@ -107,7 +107,7 @@ class PasienAPITestCase(APITestCase):
             'no_telp': '0123456787654',
         }
 
-        waktu_dibuat = pasien.waktu_dibuat.isoformat()[:-6] + 'Z'
+        waktu_dibuat = pasien.waktu_dibuat.astimezone().isoformat()
         response = self.client.put(self.url + str(pasien.id) + '/', data)
         data['id'] = pasien.id
         data['dibuat_oleh'] = self.pengguna.id
