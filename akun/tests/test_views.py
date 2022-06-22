@@ -20,7 +20,10 @@ class AkunAPITestCase(APITestCase):
         token = self.client.post('/akun/login/', self.user_data).data['token']
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
-        response = self.client.post('/akun/logout/', self.user_data)
+        response = self.client.post('/akun/logout/')
+        tokens = Token.objects.filter(
+            user__username=self.user_data['username'])
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, {'detail': 'Logout success'})
+        self.assertEqual(tokens.count(), 0)

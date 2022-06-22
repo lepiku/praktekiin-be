@@ -7,6 +7,7 @@ from rest_framework.response import Response
 
 @api_view(['POST'])
 def logout(request):
-    Token.objects.get(user=request.user)
+    token = Token.objects.get(user=request.user)
+    token.delete()
     request.session.flush()
     return Response({'detail': 'Logout success'})
