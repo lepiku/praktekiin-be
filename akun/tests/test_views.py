@@ -7,14 +7,24 @@ from akun.models import Pengguna
 
 class AkunAPITestCase(APITestCase):
     def setUp(self):
-        self.user_data = {'username': 'dimas', 'password': 'd'}
+        self.user_data = {'username': 'dimas', 'password': 'd',
+                          'email': 'dimas@g.c', 'role': Pengguna.Role.ADMIN}
         Pengguna.objects.create_user(**self.user_data)
 
     def test_login(self):
         response = self.client.post('/akun/login/', self.user_data)
 
         token = Token.objects.get(user__username=self.user_data['username'])
-        self.assertEqual(response.data['token'], token.key)
+        self.assertEqual(response.data, {
+            'token': token.key,
+            'pengguna': {
+                'id': 1,
+                'username': 'dimas',
+                'email': 'dimas@g.c',
+                'role': 'AD',
+                'role_name': 'Admin',
+            }
+        })
 
     def test_logout(self):
         token = self.client.post('/akun/login/', self.user_data).data['token']
