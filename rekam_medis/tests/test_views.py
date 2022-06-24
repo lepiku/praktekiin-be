@@ -45,10 +45,18 @@ class PasienAPITestCase(APITestCase):
 
     def test_pasien_list(self):
         response = self.client.get(self.url)
-        serializer = PasienSerializer(Pasien.objects.all(), many=True)
+        serializer = PasienSerializer(
+            Pasien.objects.all().order_by('-id'), many=True)
+
+        data = {
+            'count': 1,
+            'next': None,
+            'previous': None,
+            'results': serializer.data,
+        }
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.data, data)
 
     def test_pasien_create(self):
         data = {

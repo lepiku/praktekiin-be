@@ -7,4 +7,4 @@ class PasienSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pasien
         fields = '__all__'
-        read_only_fields = ['dibuat_oleh', 'waktu_dibuat']
+        read_only_fields = ['dibuat_oleh', 'waktu_dibuat', 'waktu_diubah']

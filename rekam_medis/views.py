@@ -3,11 +3,17 @@ from rest_framework.response import Response
 
 from rekam_medis.models import Pasien
 from rekam_medis.serializers import PasienSerializer
+from rest_framework.pagination import PageNumberPagination
+
+
+class PasienListPagination(PageNumberPagination):
+    page_size = 20
 
 
 class PasienViewSet(viewsets.ModelViewSet):
-    queryset = Pasien.objects.all()
+    queryset = Pasien.objects.all().order_by('-id')
     serializer_class = PasienSerializer
+    pagination_class = PasienListPagination
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
