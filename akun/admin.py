@@ -24,16 +24,14 @@ class PenggunaAdmin(UserAdmin):
     add_form = PenggunaCreationForm
     form = PenggunaChangeForm
     model = Pengguna
-    list_display = ['username', 'role', 'is_superuser']
+    list_display = ['username', 'peran', 'is_superuser']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.fieldsets is not None:
-            added_role = self.fieldsets[0][1]['fields'] + ('role',)
-            self.fieldsets[0][1]['fields'] = added_role
-        if self.add_fieldsets is not None:
-            added_role = self.add_fieldsets[0][1]['fields'] + ('role',)
-            self.add_fieldsets[0][1]['fields'] = added_role
+            added_fields = self.fieldsets[0][1]['fields'] + (
+                'nama_panggilan', 'peran', 'no_hp')
+            self.fieldsets[0][1]['fields'] = added_fields
 
 
 admin.site.register(Pengguna, PenggunaAdmin)

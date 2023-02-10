@@ -10,7 +10,7 @@ from akun.models import Pengguna
 from akun.serializers import PenggunaSerializer
 
 
-class LoginAPIView(ObtainAuthToken):
+class MasukAPIView(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
         pengguna = Pengguna.objects.get(auth_token=response.data['token'])
@@ -20,8 +20,8 @@ class LoginAPIView(ObtainAuthToken):
 
 
 @api_view(['POST'])
-def logout(request):
+def keluar(request):
     token = Token.objects.get(user=request.user)
     token.delete()
     request.session.flush()
-    return Response({'detail': 'Logout success'})
+    return Response({'detail': 'Berhasil keluar.'})

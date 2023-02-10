@@ -4,10 +4,12 @@ from django.contrib.auth.models import AbstractUser
 
 class Pengguna(AbstractUser):
     class Role(models.TextChoices):
-        ADMIN = 'AD', 'Admin'
-        DOKTER = 'DR', 'Dokter'
-        PERAWAT = 'PR', 'Perawat'
-        PASIEN = '', 'Pasien'
+        STAF_ADMIN = 'ADM', 'Staf Administrasi'
+        DOKTER_GIGI = 'DRG', 'Dokter Gigi'
+        PERAWAT = 'PRW', 'Perawat'
+        PASIEN = 'PAS', 'Pasien'
 
-    role = models.CharField(
-        max_length=2, blank=True, choices=Role.choices, default=Role.PASIEN)
+    nama_panggilan = models.CharField(max_length=32)
+    peran = models.CharField(
+        max_length=3, blank=True, choices=Role.choices, default=Role.PASIEN)
+    no_hp = models.CharField(max_length=15)

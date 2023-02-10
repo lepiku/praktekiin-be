@@ -7,12 +7,17 @@ from akun.models import Pengguna
 
 class AkunAPITestCase(APITestCase):
     def setUp(self):
-        self.user_data = {'username': 'dimas', 'password': 'd',
-                          'email': 'dimas@g.c', 'role': Pengguna.Role.ADMIN}
+        self.user_data = {
+            'username': 'dimas',
+            'password': 'asdf1234',
+            'nama_panggilan': 'Dimas',
+            'no_hp': '081122334455',
+            'peran': Pengguna.Role.STAF_ADMIN
+        }
         Pengguna.objects.create_user(**self.user_data)
 
-    def test_login(self):
-        response = self.client.post('/akun/login/', self.user_data)
+    def test_masuk(self):
+        response = self.client.post('/akun/masuk/', self.user_data)
 
         token = Token.objects.get(user__username=self.user_data['username'])
         self.assertEqual(response.data, {
@@ -20,20 +25,21 @@ class AkunAPITestCase(APITestCase):
             'pengguna': {
                 'id': 1,
                 'username': 'dimas',
-                'email': 'dimas@g.c',
-                'role': 'AD',
-                'role_name': 'Admin',
+                'nama_panggilan': 'Dimas',
+                'no_hp': '081122334455',
+                'peran': 'ADM',
+                'peran_nama': 'Staf Administrasi',
             }
         })
 
-    def test_logout(self):
-        token = self.client.post('/akun/login/', self.user_data).data['token']
+    def test_keluar(self):
+        token = self.client.post('/akun/masuk/', self.user_data).data['token']
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {token}')
 
-        response = self.client.post('/akun/logout/')
+        response = self.client.post('/akun/keluar/')
         tokens = Token.objects.filter(
             user__username=self.user_data['username'])
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, {'detail': 'Logout success'})
+        self.assertEqual(response.data, {'detail': 'Berhasil keluar.'})
         self.assertEqual(tokens.count(), 0)
