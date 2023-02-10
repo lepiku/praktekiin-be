@@ -10,7 +10,7 @@ class PasienModelTestCase(TestCase):
             alamat='Depok',
             pekerjaan='Mahasiswa',
             tanggal_lahir='2000-01-01',
-            no_telp='0123456789012',
+            no_hp='0123456789012',
         )
 
         self.assertEqual(str(pasien), pasien.nama)

@@ -4,11 +4,9 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from praktekiin.test import create_pengguna_and_login
+from praktekiin.test import create_pengguna_and_masuk
 from rekam_medis.models import Pasien
 from rekam_medis.serializers import PasienSerializer
-
-from pprint import pprint
 
 
 class PasienAPITestCase(APITestCase):
@@ -16,15 +14,14 @@ class PasienAPITestCase(APITestCase):
 
     def setUp(self):
         login_data = {'username': 'dimas', 'password': 'd'}
-        self.pengguna = create_pengguna_and_login(self.client, login_data)
+        self.pengguna = create_pengguna_and_masuk(self.client, login_data)
 
-        Pasien.objects.create(
+        pasien = Pasien.objects.create(
             nama='Dimas',
             jenis_kelamin='L',
             nama_kk='Dimas',
             tempat_lahir='Depok',
             tanggal_lahir='2000-01-01',
-            nama_ayah_suami='John Smith',
             alamat='Maharaja',
             alamat_rt='001',
             alamat_rw='002',
@@ -33,15 +30,14 @@ class PasienAPITestCase(APITestCase):
             alamat_kota_kab='Depok',
             alamat_provinsi='Jawa Barat',
             alamat_kode_pos='12345',
-            no_telp='0123456789012',
+            no_hp='0123456789012',
             pekerjaan='Mahasiswa',
             status_perkawinan='BL',
             agama='islam',
-            cara_bayar='C',
-            tanggal='2022-06-01',
             promosi=True,
             dibuat_oleh=self.pengguna,
         )
+        pasien.dikelola_oleh.add(self.pengguna)
 
     def test_pasien_list(self):
         response = self.client.get(self.url)
@@ -65,7 +61,6 @@ class PasienAPITestCase(APITestCase):
             'nama_kk': 'Dimas',
             'tempat_lahir': 'Depok',
             'tanggal_lahir': '2000-01-01',
-            'nama_ayah_suami': 'John Smith',
             'alamat': 'Maharaja',
             'alamat_rt': '001',
             'alamat_rw': '002',
@@ -74,12 +69,10 @@ class PasienAPITestCase(APITestCase):
             'alamat_kota_kab': 'Depok',
             'alamat_provinsi': 'Jawa Barat',
             'alamat_kode_pos': '12345',
-            'no_telp': '0123456789012',
+            'no_hp': '0123456789012',
             'pekerjaan': 'Mahasiswa',
             'status_perkawinan': '',
             'agama': 'islam',
-            'cara_bayar': 'C',
-            'tanggal': '2022-06-01',
             'promosi': False,
         }
 
@@ -89,6 +82,7 @@ class PasienAPITestCase(APITestCase):
 
         data['id'] = 2
         data['dibuat_oleh'] = self.pengguna.id
+        data['dikelola_oleh'] = [self.pengguna.id]
         data['waktu_dibuat'] = now.astimezone().isoformat()
         data['waktu_diubah'] = now.astimezone().isoformat()
 
@@ -100,10 +94,9 @@ class PasienAPITestCase(APITestCase):
         data = {
             'nama': 'Tasya',
             'jenis_kelamin': 'P',
-            'nama_kk': 'Dimas',
+            'nama_kk': '',
             'tempat_lahir': '',
             'tanggal_lahir': '2000-01-01',
-            'nama_ayah_suami': '',
             'alamat': 'Maharaja',
             'alamat_rt': '',
             'alamat_rw': '',
@@ -112,12 +105,10 @@ class PasienAPITestCase(APITestCase):
             'alamat_kota_kab': '',
             'alamat_provinsi': '',
             'alamat_kode_pos': '',
-            'no_telp': '',
-            'pekerjaan': 'Mahasiswa',
+            'no_hp': '',
+            'pekerjaan': '',
             'status_perkawinan': '',
             'agama': '',
-            'cara_bayar': '',
-            # 'tanggal': None,
             'promosi': False,
         }
 
@@ -126,9 +117,9 @@ class PasienAPITestCase(APITestCase):
             response = self.client.post(self.url, data)
         data['id'] = 2
         data['dibuat_oleh'] = self.pengguna.id
+        data['dikelola_oleh'] = [self.pengguna.id]
         data['waktu_dibuat'] = now.astimezone().isoformat()
         data['waktu_diubah'] = now.astimezone().isoformat()
-        data['tanggal'] = None
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data, data)
@@ -148,7 +139,6 @@ class PasienAPITestCase(APITestCase):
             'nama_kk': 'Dimas',
             'tempat_lahir': 'Depok',
             'tanggal_lahir': '2000-01-01',
-            'nama_ayah_suami': 'John Smith',
             'alamat': 'Maharaja',
             'alamat_rt': '001',
             'alamat_rw': '002',
@@ -157,12 +147,10 @@ class PasienAPITestCase(APITestCase):
             'alamat_kota_kab': 'Depok',
             'alamat_provinsi': 'Jawa Barat',
             'alamat_kode_pos': '12345',
-            'no_telp': '0123456789012',
+            'no_hp': '0123456789012',
             'pekerjaan': 'PNS',
             'status_perkawinan': '',
             'agama': 'islam',
-            'cara_bayar': 'C',
-            'tanggal': '2022-06-01',
             'promosi': False,
         }
 
@@ -175,6 +163,7 @@ class PasienAPITestCase(APITestCase):
 
         data['id'] = 1
         data['dibuat_oleh'] = self.pengguna.id
+        data['dikelola_oleh'] = [self.pengguna.id]
         data['waktu_dibuat'] = waktu_dibuat
         data['waktu_diubah'] = now.astimezone().isoformat()
 
@@ -188,7 +177,6 @@ class PasienAPITestCase(APITestCase):
             nama_kk='Dimas',
             tempat_lahir='Depok',
             tanggal_lahir='2000-01-01',
-            nama_ayah_suami='John Smith',
             alamat='Maharaja',
             alamat_rt='001',
             alamat_rw='002',
@@ -197,12 +185,10 @@ class PasienAPITestCase(APITestCase):
             alamat_kota_kab='Depok',
             alamat_provinsi='Jawa Barat',
             alamat_kode_pos='12345',
-            no_telp='0123456789012',
+            no_hp='0123456789012',
             pekerjaan='Mahasiswa',
             status_perkawinan='BL',
             agama='islam',
-            cara_bayar='C',
-            tanggal='2022-06-01',
             promosi=True,
         )
 
@@ -212,7 +198,6 @@ class PasienAPITestCase(APITestCase):
             'nama_kk': 'Dimas',
             'tempat_lahir': 'Depok',
             'tanggal_lahir': '2000-01-01',
-            'nama_ayah_suami': 'John Smith',
             'alamat': 'Maharaja',
             'alamat_rt': '001',
             'alamat_rw': '002',
@@ -221,12 +206,10 @@ class PasienAPITestCase(APITestCase):
             'alamat_kota_kab': 'Depok',
             'alamat_provinsi': 'Jawa Barat',
             'alamat_kode_pos': '12345',
-            'no_telp': '0123456789012',
+            'no_hp': '0123456789012',
             'pekerjaan': 'PNS',
             'status_perkawinan': '',
             'agama': 'islam',
-            'cara_bayar': 'C',
-            'tanggal': '2022-06-01',
             'promosi': False,
         }
 
@@ -238,6 +221,7 @@ class PasienAPITestCase(APITestCase):
 
         data['id'] = pasien.id
         data['dibuat_oleh'] = self.pengguna.id
+        data['dikelola_oleh'] = [self.pengguna.id]
         data['waktu_dibuat'] = waktu_dibuat
         data['waktu_diubah'] = now.astimezone().isoformat()
 

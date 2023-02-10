@@ -12,4 +12,4 @@ class Pengguna(AbstractUser):
     nama_panggilan = models.CharField(max_length=32)
     peran = models.CharField(
         max_length=3, blank=True, choices=Role.choices, default=Role.PASIEN)
-    no_hp = models.CharField(max_length=15)
+    no_hp = models.CharField('No. HP', max_length=15)

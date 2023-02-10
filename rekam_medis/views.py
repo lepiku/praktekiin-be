@@ -23,6 +23,7 @@ class PasienViewSet(viewsets.ModelViewSet):
         pasien = serializer.instance
         pasien.dibuat_oleh = request.user
         pasien.save()
+        pasien.dikelola_oleh.add(request.user)
         serializer = self.get_serializer(pasien)
 
         headers = self.get_success_headers(serializer.data)
@@ -32,5 +33,6 @@ class PasienViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         if instance.dibuat_oleh is None:
             instance.dibuat_oleh = request.user
+            instance.dikelola_oleh.add(request.user)
         instance.save()
         return super().update(request, *args, **kwargs)
