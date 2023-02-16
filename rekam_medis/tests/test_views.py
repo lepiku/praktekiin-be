@@ -18,7 +18,7 @@ class PasienAPITestCase(APITestCase):
 
         pasien = Pasien.objects.create(
             nama='Dimas',
-            jenis_kelamin='L',
+            jenis_kelamin='l',
             nama_kk='Dimas',
             tempat_lahir='Depok',
             tanggal_lahir='2000-01-01',
@@ -32,9 +32,8 @@ class PasienAPITestCase(APITestCase):
             alamat_kode_pos='12345',
             no_hp='0123456789012',
             pekerjaan='Mahasiswa',
-            status_perkawinan='BL',
+            status_perkawinan='belum_menikah',
             agama='islam',
-            promosi=True,
             dibuat_oleh=self.pengguna,
         )
         pasien.dikelola_oleh.add(self.pengguna)
@@ -57,7 +56,7 @@ class PasienAPITestCase(APITestCase):
     def test_pasien_create(self):
         data = {
             'nama': 'Tasya',
-            'jenis_kelamin': 'P',
+            'jenis_kelamin': 'p',
             'nama_kk': 'Dimas',
             'tempat_lahir': 'Depok',
             'tanggal_lahir': '2000-01-01',
@@ -73,7 +72,6 @@ class PasienAPITestCase(APITestCase):
             'pekerjaan': 'Mahasiswa',
             'status_perkawinan': '',
             'agama': 'islam',
-            'promosi': False,
         }
 
         now = timezone.now()
@@ -81,10 +79,12 @@ class PasienAPITestCase(APITestCase):
             response = self.client.post(self.url, data)
 
         data['id'] = 2
-        data['dibuat_oleh'] = self.pengguna.id
         data['dikelola_oleh'] = [self.pengguna.id]
+        data['dibuat_oleh'] = self.pengguna.id
         data['waktu_dibuat'] = now.astimezone().isoformat()
+        data['diubah_oleh'] = self.pengguna.id
         data['waktu_diubah'] = now.astimezone().isoformat()
+        data['diarsipkan'] = False
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data, data)
@@ -93,7 +93,7 @@ class PasienAPITestCase(APITestCase):
     def test_pasien_create_only_with_required_fields(self):
         data = {
             'nama': 'Tasya',
-            'jenis_kelamin': 'P',
+            'jenis_kelamin': 'p',
             'nama_kk': '',
             'tempat_lahir': '',
             'tanggal_lahir': '2000-01-01',
@@ -109,17 +109,18 @@ class PasienAPITestCase(APITestCase):
             'pekerjaan': '',
             'status_perkawinan': '',
             'agama': '',
-            'promosi': False,
         }
 
         now = timezone.now()
         with mock.patch('django.utils.timezone.now', mock.Mock(return_value=now)):
             response = self.client.post(self.url, data)
         data['id'] = 2
-        data['dibuat_oleh'] = self.pengguna.id
         data['dikelola_oleh'] = [self.pengguna.id]
+        data['dibuat_oleh'] = self.pengguna.id
         data['waktu_dibuat'] = now.astimezone().isoformat()
+        data['diubah_oleh'] = self.pengguna.id
         data['waktu_diubah'] = now.astimezone().isoformat()
+        data['diarsipkan'] = False
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data, data)
@@ -135,7 +136,7 @@ class PasienAPITestCase(APITestCase):
     def test_pasien_update(self):
         data = {
             'nama': 'Dimas',
-            'jenis_kelamin': 'L',
+            'jenis_kelamin': 'l',
             'nama_kk': 'Dimas',
             'tempat_lahir': 'Depok',
             'tanggal_lahir': '2000-01-01',
@@ -151,7 +152,6 @@ class PasienAPITestCase(APITestCase):
             'pekerjaan': 'PNS',
             'status_perkawinan': '',
             'agama': 'islam',
-            'promosi': False,
         }
 
         pasien = Pasien.objects.get(id=1)
@@ -162,10 +162,12 @@ class PasienAPITestCase(APITestCase):
             response = self.client.put(self.url + '1/', data)
 
         data['id'] = 1
-        data['dibuat_oleh'] = self.pengguna.id
         data['dikelola_oleh'] = [self.pengguna.id]
+        data['dibuat_oleh'] = self.pengguna.id
         data['waktu_dibuat'] = waktu_dibuat
+        data['diubah_oleh'] = self.pengguna.id
         data['waktu_diubah'] = now.astimezone().isoformat()
+        data['diarsipkan'] = False
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, data)
@@ -173,7 +175,7 @@ class PasienAPITestCase(APITestCase):
     def test_pasien_update_without_dibuat_oleh_will_set(self):
         pasien = Pasien.objects.create(
             nama='Tasya',
-            jenis_kelamin='P',
+            jenis_kelamin='p',
             nama_kk='Dimas',
             tempat_lahir='Depok',
             tanggal_lahir='2000-01-01',
@@ -187,14 +189,13 @@ class PasienAPITestCase(APITestCase):
             alamat_kode_pos='12345',
             no_hp='0123456789012',
             pekerjaan='Mahasiswa',
-            status_perkawinan='BL',
+            status_perkawinan='belum_menikah',
             agama='islam',
-            promosi=True,
         )
 
         data = {
             'nama': 'Tasya',
-            'jenis_kelamin': 'P',
+            'jenis_kelamin': 'p',
             'nama_kk': 'Dimas',
             'tempat_lahir': 'Depok',
             'tanggal_lahir': '2000-01-01',
@@ -210,7 +211,6 @@ class PasienAPITestCase(APITestCase):
             'pekerjaan': 'PNS',
             'status_perkawinan': '',
             'agama': 'islam',
-            'promosi': False,
         }
 
         waktu_dibuat = pasien.waktu_dibuat.astimezone().isoformat()
@@ -220,10 +220,12 @@ class PasienAPITestCase(APITestCase):
             response = self.client.put(self.url + str(pasien.id) + '/', data)
 
         data['id'] = pasien.id
-        data['dibuat_oleh'] = self.pengguna.id
         data['dikelola_oleh'] = [self.pengguna.id]
+        data['dibuat_oleh'] = self.pengguna.id
         data['waktu_dibuat'] = waktu_dibuat
+        data['diubah_oleh'] = self.pengguna.id
         data['waktu_diubah'] = now.astimezone().isoformat()
+        data['diarsipkan'] = False
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, data)
