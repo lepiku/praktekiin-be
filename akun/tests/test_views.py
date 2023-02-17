@@ -12,7 +12,7 @@ class AkunAPITestCase(APITestCase):
             'password': 'asdf1234',
             'nama_panggilan': 'Dimas',
             'no_hp': '081122334455',
-            'peran': Pengguna.Peran.STAF_ADMIN
+            'peran': Pengguna.Peran.STAF_ADMINISTRASI
         }
         Pengguna.objects.create_user(**self.user_data)
 

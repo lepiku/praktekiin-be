@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 class Pengguna(AbstractUser):
     class Peran(models.TextChoices):
-        STAF_ADMIN = 'admin', 'Staf Administrasi'
+        STAF_ADMINISTRASI = 'admin', 'Staf Administrasi'
         DOKTER_GIGI = 'dokter_gigi', 'Dokter Gigi'
         PERAWAT = 'perawat', 'Perawat'
         PASIEN = 'pasien', 'Pasien'
