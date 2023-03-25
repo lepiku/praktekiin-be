@@ -13,15 +13,15 @@ from akun.serializers import PenggunaSerializer
 class MasukAPIView(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
-        pengguna = Pengguna.objects.get(auth_token=response.data['token'])
+        pengguna = Pengguna.objects.get(auth_token=response.data["token"])
         serializer = PenggunaSerializer(pengguna)
-        response.data['pengguna'] = serializer.data
+        response.data["pengguna"] = serializer.data
         return response
 
 
-@api_view(['POST'])
+@api_view(["POST"])
 def keluar(request):
     token = Token.objects.get(user=request.user)
     token.delete()
     request.session.flush()
-    return Response({'detail': 'Berhasil keluar.'})
+    return Response({"detail": "Berhasil keluar."})

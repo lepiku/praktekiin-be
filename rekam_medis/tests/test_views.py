@@ -10,44 +10,43 @@ from rekam_medis.serializers import PasienSerializer
 
 
 class PasienAPITestCase(APITestCase):
-    url = '/rekam_medis/pasien/'
+    url = "/rekam_medis/pasien/"
 
     def setUp(self):
-        login_data = {'username': 'dimas', 'password': 'd'}
+        login_data = {"username": "dimas", "password": "d"}
         self.pengguna = create_pengguna_and_masuk(self.client, login_data)
 
         pasien = Pasien.objects.create(
-            nama='Dimas',
-            jenis_kelamin='l',
-            nama_kk='Dimas',
-            tempat_lahir='Depok',
-            tanggal_lahir='2000-01-01',
-            alamat='Maharaja',
-            alamat_rt='001',
-            alamat_rw='002',
-            alamat_kel_desa='Kel',
-            alamat_kecamatan='Kec',
-            alamat_kota_kab='Depok',
-            alamat_provinsi='Jawa Barat',
-            alamat_kode_pos='12345',
-            no_hp='0123456789012',
-            pekerjaan='Mahasiswa',
-            status_perkawinan='belum_menikah',
-            agama='islam',
+            nama="Dimas",
+            jenis_kelamin="l",
+            nama_kk="Dimas",
+            tempat_lahir="Depok",
+            tanggal_lahir="2000-01-01",
+            alamat="Maharaja",
+            alamat_rt="001",
+            alamat_rw="002",
+            alamat_kel_desa="Kel",
+            alamat_kecamatan="Kec",
+            alamat_kota_kab="Depok",
+            alamat_provinsi="Jawa Barat",
+            alamat_kode_pos="12345",
+            no_hp="0123456789012",
+            pekerjaan="Mahasiswa",
+            status_perkawinan="belum_menikah",
+            agama="islam",
             dibuat_oleh=self.pengguna,
         )
         pasien.dikelola_oleh.add(self.pengguna)
 
     def test_pasien_list(self):
         response = self.client.get(self.url)
-        serializer = PasienSerializer(
-            Pasien.objects.all().order_by('-id'), many=True)
+        serializer = PasienSerializer(Pasien.objects.all().order_by("-id"), many=True)
 
         data = {
-            'count': 1,
-            'next': None,
-            'previous': None,
-            'results': serializer.data,
+            "count": 1,
+            "next": None,
+            "previous": None,
+            "results": serializer.data,
         }
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -55,36 +54,36 @@ class PasienAPITestCase(APITestCase):
 
     def test_pasien_create(self):
         data = {
-            'nama': 'Tasya',
-            'jenis_kelamin': 'p',
-            'nama_kk': 'Dimas',
-            'tempat_lahir': 'Depok',
-            'tanggal_lahir': '2000-01-01',
-            'alamat': 'Maharaja',
-            'alamat_rt': '001',
-            'alamat_rw': '002',
-            'alamat_kel_desa': 'Kel',
-            'alamat_kecamatan': 'Kec',
-            'alamat_kota_kab': 'Depok',
-            'alamat_provinsi': 'Jawa Barat',
-            'alamat_kode_pos': '12345',
-            'no_hp': '0123456789012',
-            'pekerjaan': 'Mahasiswa',
-            'status_perkawinan': '',
-            'agama': 'islam',
+            "nama": "Tasya",
+            "jenis_kelamin": "p",
+            "nama_kk": "Dimas",
+            "tempat_lahir": "Depok",
+            "tanggal_lahir": "2000-01-01",
+            "alamat": "Maharaja",
+            "alamat_rt": "001",
+            "alamat_rw": "002",
+            "alamat_kel_desa": "Kel",
+            "alamat_kecamatan": "Kec",
+            "alamat_kota_kab": "Depok",
+            "alamat_provinsi": "Jawa Barat",
+            "alamat_kode_pos": "12345",
+            "no_hp": "0123456789012",
+            "pekerjaan": "Mahasiswa",
+            "status_perkawinan": "",
+            "agama": "islam",
         }
 
         now = timezone.now()
-        with mock.patch('django.utils.timezone.now', mock.Mock(return_value=now)):
+        with mock.patch("django.utils.timezone.now", mock.Mock(return_value=now)):
             response = self.client.post(self.url, data)
 
-        data['id'] = 2
-        data['dikelola_oleh'] = [self.pengguna.id]
-        data['dibuat_oleh'] = self.pengguna.id
-        data['waktu_dibuat'] = now.astimezone().isoformat()
-        data['diubah_oleh'] = self.pengguna.id
-        data['waktu_diubah'] = now.astimezone().isoformat()
-        data['diarsipkan'] = False
+        data["id"] = 2
+        data["dikelola_oleh"] = [self.pengguna.id]
+        data["dibuat_oleh"] = self.pengguna.id
+        data["waktu_dibuat"] = now.astimezone().isoformat()
+        data["diubah_oleh"] = self.pengguna.id
+        data["waktu_diubah"] = now.astimezone().isoformat()
+        data["diarsipkan"] = False
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data, data)
@@ -92,42 +91,42 @@ class PasienAPITestCase(APITestCase):
 
     def test_pasien_create_only_with_required_fields(self):
         data = {
-            'nama': 'Tasya',
-            'jenis_kelamin': 'p',
-            'nama_kk': '',
-            'tempat_lahir': '',
-            'tanggal_lahir': '2000-01-01',
-            'alamat': 'Maharaja',
-            'alamat_rt': '',
-            'alamat_rw': '',
-            'alamat_kel_desa': '',
-            'alamat_kecamatan': '',
-            'alamat_kota_kab': '',
-            'alamat_provinsi': '',
-            'alamat_kode_pos': '',
-            'no_hp': '',
-            'pekerjaan': '',
-            'status_perkawinan': '',
-            'agama': '',
+            "nama": "Tasya",
+            "jenis_kelamin": "p",
+            "nama_kk": "",
+            "tempat_lahir": "",
+            "tanggal_lahir": "2000-01-01",
+            "alamat": "Maharaja",
+            "alamat_rt": "",
+            "alamat_rw": "",
+            "alamat_kel_desa": "",
+            "alamat_kecamatan": "",
+            "alamat_kota_kab": "",
+            "alamat_provinsi": "",
+            "alamat_kode_pos": "",
+            "no_hp": "",
+            "pekerjaan": "",
+            "status_perkawinan": "",
+            "agama": "",
         }
 
         now = timezone.now()
-        with mock.patch('django.utils.timezone.now', mock.Mock(return_value=now)):
+        with mock.patch("django.utils.timezone.now", mock.Mock(return_value=now)):
             response = self.client.post(self.url, data)
-        data['id'] = 2
-        data['dikelola_oleh'] = [self.pengguna.id]
-        data['dibuat_oleh'] = self.pengguna.id
-        data['waktu_dibuat'] = now.astimezone().isoformat()
-        data['diubah_oleh'] = self.pengguna.id
-        data['waktu_diubah'] = now.astimezone().isoformat()
-        data['diarsipkan'] = False
+        data["id"] = 2
+        data["dikelola_oleh"] = [self.pengguna.id]
+        data["dibuat_oleh"] = self.pengguna.id
+        data["waktu_dibuat"] = now.astimezone().isoformat()
+        data["diubah_oleh"] = self.pengguna.id
+        data["waktu_diubah"] = now.astimezone().isoformat()
+        data["diarsipkan"] = False
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data, data)
         self.assertEqual(Pasien.objects.count(), 2)
 
     def test_pasien_retrieve(self):
-        response = self.client.get(self.url + '1/')
+        response = self.client.get(self.url + "1/")
         serializer = PasienSerializer(Pasien.objects.get(id=1))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -135,103 +134,103 @@ class PasienAPITestCase(APITestCase):
 
     def test_pasien_update(self):
         data = {
-            'nama': 'Dimas',
-            'jenis_kelamin': 'l',
-            'nama_kk': 'Dimas',
-            'tempat_lahir': 'Depok',
-            'tanggal_lahir': '2000-01-01',
-            'alamat': 'Maharaja',
-            'alamat_rt': '001',
-            'alamat_rw': '002',
-            'alamat_kel_desa': 'Kel',
-            'alamat_kecamatan': 'Kec',
-            'alamat_kota_kab': 'Depok',
-            'alamat_provinsi': 'Jawa Barat',
-            'alamat_kode_pos': '12345',
-            'no_hp': '0123456789012',
-            'pekerjaan': 'PNS',
-            'status_perkawinan': '',
-            'agama': 'islam',
+            "nama": "Dimas",
+            "jenis_kelamin": "l",
+            "nama_kk": "Dimas",
+            "tempat_lahir": "Depok",
+            "tanggal_lahir": "2000-01-01",
+            "alamat": "Maharaja",
+            "alamat_rt": "001",
+            "alamat_rw": "002",
+            "alamat_kel_desa": "Kel",
+            "alamat_kecamatan": "Kec",
+            "alamat_kota_kab": "Depok",
+            "alamat_provinsi": "Jawa Barat",
+            "alamat_kode_pos": "12345",
+            "no_hp": "0123456789012",
+            "pekerjaan": "PNS",
+            "status_perkawinan": "",
+            "agama": "islam",
         }
 
         pasien = Pasien.objects.get(id=1)
         waktu_dibuat = pasien.waktu_dibuat.astimezone().isoformat()
 
         now = timezone.now()
-        with mock.patch('django.utils.timezone.now', mock.Mock(return_value=now)):
-            response = self.client.put(self.url + '1/', data)
+        with mock.patch("django.utils.timezone.now", mock.Mock(return_value=now)):
+            response = self.client.put(self.url + "1/", data)
 
-        data['id'] = 1
-        data['dikelola_oleh'] = [self.pengguna.id]
-        data['dibuat_oleh'] = self.pengguna.id
-        data['waktu_dibuat'] = waktu_dibuat
-        data['diubah_oleh'] = self.pengguna.id
-        data['waktu_diubah'] = now.astimezone().isoformat()
-        data['diarsipkan'] = False
+        data["id"] = 1
+        data["dikelola_oleh"] = [self.pengguna.id]
+        data["dibuat_oleh"] = self.pengguna.id
+        data["waktu_dibuat"] = waktu_dibuat
+        data["diubah_oleh"] = self.pengguna.id
+        data["waktu_diubah"] = now.astimezone().isoformat()
+        data["diarsipkan"] = False
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, data)
 
     def test_pasien_update_without_dibuat_oleh_will_set(self):
         pasien = Pasien.objects.create(
-            nama='Tasya',
-            jenis_kelamin='p',
-            nama_kk='Dimas',
-            tempat_lahir='Depok',
-            tanggal_lahir='2000-01-01',
-            alamat='Maharaja',
-            alamat_rt='001',
-            alamat_rw='002',
-            alamat_kel_desa='Kel',
-            alamat_kecamatan='Kec',
-            alamat_kota_kab='Depok',
-            alamat_provinsi='Jawa Barat',
-            alamat_kode_pos='12345',
-            no_hp='0123456789012',
-            pekerjaan='Mahasiswa',
-            status_perkawinan='belum_menikah',
-            agama='islam',
+            nama="Tasya",
+            jenis_kelamin="p",
+            nama_kk="Dimas",
+            tempat_lahir="Depok",
+            tanggal_lahir="2000-01-01",
+            alamat="Maharaja",
+            alamat_rt="001",
+            alamat_rw="002",
+            alamat_kel_desa="Kel",
+            alamat_kecamatan="Kec",
+            alamat_kota_kab="Depok",
+            alamat_provinsi="Jawa Barat",
+            alamat_kode_pos="12345",
+            no_hp="0123456789012",
+            pekerjaan="Mahasiswa",
+            status_perkawinan="belum_menikah",
+            agama="islam",
         )
 
         data = {
-            'nama': 'Tasya',
-            'jenis_kelamin': 'p',
-            'nama_kk': 'Dimas',
-            'tempat_lahir': 'Depok',
-            'tanggal_lahir': '2000-01-01',
-            'alamat': 'Maharaja',
-            'alamat_rt': '001',
-            'alamat_rw': '002',
-            'alamat_kel_desa': 'Kel',
-            'alamat_kecamatan': 'Kec',
-            'alamat_kota_kab': 'Depok',
-            'alamat_provinsi': 'Jawa Barat',
-            'alamat_kode_pos': '12345',
-            'no_hp': '0123456789012',
-            'pekerjaan': 'PNS',
-            'status_perkawinan': '',
-            'agama': 'islam',
+            "nama": "Tasya",
+            "jenis_kelamin": "p",
+            "nama_kk": "Dimas",
+            "tempat_lahir": "Depok",
+            "tanggal_lahir": "2000-01-01",
+            "alamat": "Maharaja",
+            "alamat_rt": "001",
+            "alamat_rw": "002",
+            "alamat_kel_desa": "Kel",
+            "alamat_kecamatan": "Kec",
+            "alamat_kota_kab": "Depok",
+            "alamat_provinsi": "Jawa Barat",
+            "alamat_kode_pos": "12345",
+            "no_hp": "0123456789012",
+            "pekerjaan": "PNS",
+            "status_perkawinan": "",
+            "agama": "islam",
         }
 
         waktu_dibuat = pasien.waktu_dibuat.astimezone().isoformat()
 
         now = timezone.now()
-        with mock.patch('django.utils.timezone.now', mock.Mock(return_value=now)):
-            response = self.client.put(self.url + str(pasien.id) + '/', data)
+        with mock.patch("django.utils.timezone.now", mock.Mock(return_value=now)):
+            response = self.client.put(self.url + str(pasien.id) + "/", data)
 
-        data['id'] = pasien.id
-        data['dikelola_oleh'] = [self.pengguna.id]
-        data['dibuat_oleh'] = self.pengguna.id
-        data['waktu_dibuat'] = waktu_dibuat
-        data['diubah_oleh'] = self.pengguna.id
-        data['waktu_diubah'] = now.astimezone().isoformat()
-        data['diarsipkan'] = False
+        data["id"] = pasien.id
+        data["dikelola_oleh"] = [self.pengguna.id]
+        data["dibuat_oleh"] = self.pengguna.id
+        data["waktu_dibuat"] = waktu_dibuat
+        data["diubah_oleh"] = self.pengguna.id
+        data["waktu_diubah"] = now.astimezone().isoformat()
+        data["diarsipkan"] = False
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, data)
 
     def test_pasien_destroy(self):
-        response = self.client.delete(self.url + '1/')
+        response = self.client.delete(self.url + "1/")
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Pasien.objects.count(), 0)

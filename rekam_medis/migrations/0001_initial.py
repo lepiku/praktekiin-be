@@ -6,7 +6,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -15,208 +14,618 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Alergi',
+            name="Alergi",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('nama', models.CharField(max_length=256)),
-                ('deskripsi', models.TextField()),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("nama", models.CharField(max_length=256)),
+                ("deskripsi", models.TextField()),
             ],
         ),
         migrations.CreateModel(
-            name='ICD10',
+            name="ICD10",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('kode', models.CharField(blank=True, max_length=16)),
-                ('nama', models.CharField(max_length=256)),
-                ('deskripsi', models.TextField(blank=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("kode", models.CharField(blank=True, max_length=16)),
+                ("nama", models.CharField(max_length=256)),
+                ("deskripsi", models.TextField(blank=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Pasien',
+            name="Pasien",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('nama', models.CharField(max_length=256, verbose_name='Nama Lengkap')),
-                ('jenis_kelamin', models.CharField(choices=[('l', 'Laki-laki'), ('p', 'Perempuan')], max_length=1)),
-                ('nama_kk', models.CharField(blank=True, max_length=256, verbose_name='Nama Kepala Keluarga')),
-                ('tempat_lahir', models.CharField(blank=True, max_length=32)),
-                ('tanggal_lahir', models.DateField()),
-                ('alamat', models.CharField(max_length=512)),
-                ('alamat_rt', models.CharField(blank=True, max_length=5, verbose_name='RT')),
-                ('alamat_rw', models.CharField(blank=True, max_length=5, verbose_name='RW')),
-                ('alamat_kel_desa', models.CharField(blank=True, max_length=32, verbose_name='Kelurahan / Desa')),
-                ('alamat_kecamatan', models.CharField(blank=True, max_length=32)),
-                ('alamat_kota_kab', models.CharField(blank=True, max_length=32, verbose_name='Kota / Kabupaten')),
-                ('alamat_provinsi', models.CharField(blank=True, max_length=32, verbose_name='Provinsi')),
-                ('alamat_kode_pos', models.CharField(blank=True, max_length=5, verbose_name='Kode Pos')),
-                ('no_hp', models.CharField(blank=True, max_length=20, verbose_name='No. HP')),
-                ('pekerjaan', models.CharField(blank=True, max_length=128)),
-                ('status_perkawinan', models.CharField(blank=True, choices=[('belum_menikah', 'Belum Menikah'), ('sudah_menikah', 'Sudah Menikah'), ('janda_duda', 'Janda / Duda'), ('', '-')], default='', max_length=16)),
-                ('agama', models.CharField(blank=True, choices=[('islam', 'Islam'), ('katolik', 'Katolik'), ('protestan', 'Protestan'), ('hindu', 'Hindu'), ('budha', 'Budha'), ('lainnya', 'Lainnya'), ('', '-')], default='', max_length=16)),
-                ('waktu_dibuat', models.DateTimeField(auto_now_add=True)),
-                ('waktu_diubah', models.DateTimeField(auto_now=True)),
-                ('diarsipkan', models.BooleanField(default=False)),
-                ('dibuat_oleh', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='membuat_pasien', to=settings.AUTH_USER_MODEL)),
-                ('dikelola_oleh', models.ManyToManyField(related_name='mengelola_pasien', to=settings.AUTH_USER_MODEL)),
-                ('diubah_oleh', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='mengubah_pasien', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("nama", models.CharField(max_length=256, verbose_name="Nama Lengkap")),
+                (
+                    "jenis_kelamin",
+                    models.CharField(
+                        choices=[("l", "Laki-laki"), ("p", "Perempuan")], max_length=1
+                    ),
+                ),
+                (
+                    "nama_kk",
+                    models.CharField(
+                        blank=True, max_length=256, verbose_name="Nama Kepala Keluarga"
+                    ),
+                ),
+                ("tempat_lahir", models.CharField(blank=True, max_length=32)),
+                ("tanggal_lahir", models.DateField()),
+                ("alamat", models.CharField(max_length=512)),
+                (
+                    "alamat_rt",
+                    models.CharField(blank=True, max_length=5, verbose_name="RT"),
+                ),
+                (
+                    "alamat_rw",
+                    models.CharField(blank=True, max_length=5, verbose_name="RW"),
+                ),
+                (
+                    "alamat_kel_desa",
+                    models.CharField(
+                        blank=True, max_length=32, verbose_name="Kelurahan / Desa"
+                    ),
+                ),
+                ("alamat_kecamatan", models.CharField(blank=True, max_length=32)),
+                (
+                    "alamat_kota_kab",
+                    models.CharField(
+                        blank=True, max_length=32, verbose_name="Kota / Kabupaten"
+                    ),
+                ),
+                (
+                    "alamat_provinsi",
+                    models.CharField(
+                        blank=True, max_length=32, verbose_name="Provinsi"
+                    ),
+                ),
+                (
+                    "alamat_kode_pos",
+                    models.CharField(blank=True, max_length=5, verbose_name="Kode Pos"),
+                ),
+                (
+                    "no_hp",
+                    models.CharField(blank=True, max_length=20, verbose_name="No. HP"),
+                ),
+                ("pekerjaan", models.CharField(blank=True, max_length=128)),
+                (
+                    "status_perkawinan",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("belum_menikah", "Belum Menikah"),
+                            ("sudah_menikah", "Sudah Menikah"),
+                            ("janda_duda", "Janda / Duda"),
+                            ("", "-"),
+                        ],
+                        default="",
+                        max_length=16,
+                    ),
+                ),
+                (
+                    "agama",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("islam", "Islam"),
+                            ("katolik", "Katolik"),
+                            ("protestan", "Protestan"),
+                            ("hindu", "Hindu"),
+                            ("budha", "Budha"),
+                            ("lainnya", "Lainnya"),
+                            ("", "-"),
+                        ],
+                        default="",
+                        max_length=16,
+                    ),
+                ),
+                ("waktu_dibuat", models.DateTimeField(auto_now_add=True)),
+                ("waktu_diubah", models.DateTimeField(auto_now=True)),
+                ("diarsipkan", models.BooleanField(default=False)),
+                (
+                    "dibuat_oleh",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="membuat_pasien",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "dikelola_oleh",
+                    models.ManyToManyField(
+                        related_name="mengelola_pasien", to=settings.AUTH_USER_MODEL
+                    ),
+                ),
+                (
+                    "diubah_oleh",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="mengubah_pasien",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Pembayaran',
+            name="Pembayaran",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('lain_lain', models.PositiveIntegerField(verbose_name='Biaya Lain-lain')),
-                ('diskon', models.CharField(blank=True, max_length=16)),
-                ('metode', models.CharField(choices=[('tunai', 'Tunai'), ('transfer', 'Transfer'), ('edc', 'Electronic Data Capture')], max_length=16)),
-                ('total', models.PositiveIntegerField()),
-                ('dicicil', models.BooleanField()),
-                ('waktu_dibuat', models.DateTimeField(auto_now_add=True)),
-                ('dibuat_oleh', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='membuat_pembayaran', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "lain_lain",
+                    models.PositiveIntegerField(verbose_name="Biaya Lain-lain"),
+                ),
+                ("diskon", models.CharField(blank=True, max_length=16)),
+                (
+                    "metode",
+                    models.CharField(
+                        choices=[
+                            ("tunai", "Tunai"),
+                            ("transfer", "Transfer"),
+                            ("edc", "Electronic Data Capture"),
+                        ],
+                        max_length=16,
+                    ),
+                ),
+                ("total", models.PositiveIntegerField()),
+                ("dicicil", models.BooleanField()),
+                ("waktu_dibuat", models.DateTimeField(auto_now_add=True)),
+                (
+                    "dibuat_oleh",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="membuat_pembayaran",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Penyakit',
+            name="Penyakit",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('nama', models.CharField(max_length=256)),
-                ('deskripsi', models.TextField()),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("nama", models.CharField(max_length=256)),
+                ("deskripsi", models.TextField()),
             ],
         ),
         migrations.CreateModel(
-            name='Perjanjian',
+            name="Perjanjian",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('status', models.CharField(choices=[('menunggu', 'Menunggu Konfirmasi'), ('terjadwal', 'Terjadwal'), ('selesai', 'Selesai')], max_length=16)),
-                ('tanggal', models.DateField()),
-                ('waktu_mulai', models.TimeField()),
-                ('waktu_selesai', models.TimeField()),
-                ('keluhan', models.TextField()),
-                ('waktu_dibuat', models.DateTimeField(auto_now_add=True)),
-                ('waktu_diubah', models.DateTimeField(auto_now=True)),
-                ('diarsipkan', models.BooleanField(default=False)),
-                ('dibuat_oleh', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='membuat_perjanjian', to=settings.AUTH_USER_MODEL)),
-                ('diubah_oleh', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='mengubah_perjanjian', to=settings.AUTH_USER_MODEL)),
-                ('dokter_gigi', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='daftar_perjanjian', to=settings.AUTH_USER_MODEL)),
-                ('pasien', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='daftar_perjanjian', to='rekam_medis.pasien')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("menunggu", "Menunggu Konfirmasi"),
+                            ("terjadwal", "Terjadwal"),
+                            ("selesai", "Selesai"),
+                        ],
+                        max_length=16,
+                    ),
+                ),
+                ("tanggal", models.DateField()),
+                ("waktu_mulai", models.TimeField()),
+                ("waktu_selesai", models.TimeField()),
+                ("keluhan", models.TextField()),
+                ("waktu_dibuat", models.DateTimeField(auto_now_add=True)),
+                ("waktu_diubah", models.DateTimeField(auto_now=True)),
+                ("diarsipkan", models.BooleanField(default=False)),
+                (
+                    "dibuat_oleh",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="membuat_perjanjian",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "diubah_oleh",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="mengubah_perjanjian",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "dokter_gigi",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="daftar_perjanjian",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "pasien",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="daftar_perjanjian",
+                        to="rekam_medis.pasien",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Plan',
+            name="Plan",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('resep', models.TextField(blank=True)),
-                ('keterangan', models.CharField(max_length=16)),
-                ('perjanjian_kontrol_kembali', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='daftar_plan_kontrol_kembali', to='rekam_medis.perjanjian')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("resep", models.TextField(blank=True)),
+                ("keterangan", models.CharField(max_length=16)),
+                (
+                    "perjanjian_kontrol_kembali",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="daftar_plan_kontrol_kembali",
+                        to="rekam_medis.perjanjian",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='RekamMedis',
+            name="RekamMedis",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('subjective', models.TextField()),
-                ('waktu_mulai', models.TimeField()),
-                ('waktu_selesai', models.TimeField()),
-                ('waktu_dibuat', models.DateTimeField(auto_now_add=True)),
-                ('waktu_diubah', models.DateTimeField(auto_now=True)),
-                ('diarsipkan', models.BooleanField(default=False)),
-                ('dibuat_oleh', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='membuat_rekam_medis', to=settings.AUTH_USER_MODEL)),
-                ('diubah_oleh', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='mengubah_rekam_medis', to=settings.AUTH_USER_MODEL)),
-                ('perjanjian', models.OneToOneField(null=True, on_delete=django.db.models.deletion.SET_NULL, to='rekam_medis.perjanjian')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("subjective", models.TextField()),
+                ("waktu_mulai", models.TimeField()),
+                ("waktu_selesai", models.TimeField()),
+                ("waktu_dibuat", models.DateTimeField(auto_now_add=True)),
+                ("waktu_diubah", models.DateTimeField(auto_now=True)),
+                ("diarsipkan", models.BooleanField(default=False)),
+                (
+                    "dibuat_oleh",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="membuat_rekam_medis",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "diubah_oleh",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="mengubah_rekam_medis",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "perjanjian",
+                    models.OneToOneField(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="rekam_medis.perjanjian",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Tindakan',
+            name="Tindakan",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('nama', models.CharField(max_length=256)),
-                ('harga_min', models.PositiveIntegerField(verbose_name='Harga Minimal')),
-                ('harga_maks', models.PositiveIntegerField(verbose_name='Harga Maksimal')),
-                ('bagi_hasil', models.PositiveSmallIntegerField()),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("nama", models.CharField(max_length=256)),
+                (
+                    "harga_min",
+                    models.PositiveIntegerField(verbose_name="Harga Minimal"),
+                ),
+                (
+                    "harga_maks",
+                    models.PositiveIntegerField(verbose_name="Harga Maksimal"),
+                ),
+                ("bagi_hasil", models.PositiveSmallIntegerField()),
             ],
         ),
         migrations.CreateModel(
-            name='PlanTindakan',
+            name="PlanTindakan",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('regio', models.PositiveSmallIntegerField()),
-                ('gigi', models.PositiveSmallIntegerField()),
-                ('jumlah', models.PositiveIntegerField()),
-                ('biaya', models.PositiveIntegerField()),
-                ('plan', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='daftar_plan_tindakan', to='rekam_medis.plan')),
-                ('tindakan', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='daftar_plan_tindakan', to='rekam_medis.tindakan')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("regio", models.PositiveSmallIntegerField()),
+                ("gigi", models.PositiveSmallIntegerField()),
+                ("jumlah", models.PositiveIntegerField()),
+                ("biaya", models.PositiveIntegerField()),
+                (
+                    "plan",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="daftar_plan_tindakan",
+                        to="rekam_medis.plan",
+                    ),
+                ),
+                (
+                    "tindakan",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="daftar_plan_tindakan",
+                        to="rekam_medis.tindakan",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='plan',
-            name='rekam_medis',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='daftar_plan', to='rekam_medis.rekammedis'),
+            model_name="plan",
+            name="rekam_medis",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="daftar_plan",
+                to="rekam_medis.rekammedis",
+            ),
         ),
         migrations.CreateModel(
-            name='PembayaranCicilan',
+            name="PembayaranCicilan",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('biaya', models.PositiveIntegerField()),
-                ('dikonfirmasi', models.BooleanField(default=False)),
-                ('waktu_dikonfirmasi', models.DateTimeField(null=True)),
-                ('dikonfirmasi_oleh', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='mengonfirmasi_cicilan', to=settings.AUTH_USER_MODEL)),
-                ('pembayaran', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='rekam_medis.pembayaran')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("biaya", models.PositiveIntegerField()),
+                ("dikonfirmasi", models.BooleanField(default=False)),
+                ("waktu_dikonfirmasi", models.DateTimeField(null=True)),
+                (
+                    "dikonfirmasi_oleh",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="mengonfirmasi_cicilan",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "pembayaran",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="rekam_medis.pembayaran",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='PembayaranBagiHasil',
+            name="PembayaranBagiHasil",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('bagi_hasil', models.PositiveSmallIntegerField()),
-                ('pembayaran', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='rekam_medis.pembayaran')),
-                ('plan_tindakan', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='rekam_medis.plantindakan')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("bagi_hasil", models.PositiveSmallIntegerField()),
+                (
+                    "pembayaran",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="rekam_medis.pembayaran",
+                    ),
+                ),
+                (
+                    "plan_tindakan",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="rekam_medis.plantindakan",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='pembayaran',
-            name='rekam_medis',
-            field=models.OneToOneField(null=True, on_delete=django.db.models.deletion.SET_NULL, to='rekam_medis.rekammedis'),
+            model_name="pembayaran",
+            name="rekam_medis",
+            field=models.OneToOneField(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="rekam_medis.rekammedis",
+            ),
         ),
         migrations.CreateModel(
-            name='Objective',
+            name="Objective",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('regio', models.PositiveSmallIntegerField()),
-                ('gigi', models.PositiveSmallIntegerField()),
-                ('deskripsi', models.CharField(max_length=256)),
-                ('rekam_medis', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='daftar_objective', to='rekam_medis.rekammedis')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("regio", models.PositiveSmallIntegerField()),
+                ("gigi", models.PositiveSmallIntegerField()),
+                ("deskripsi", models.CharField(max_length=256)),
+                (
+                    "rekam_medis",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="daftar_objective",
+                        to="rekam_medis.rekammedis",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Assessment',
+            name="Assessment",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('regio', models.PositiveSmallIntegerField()),
-                ('gigi', models.PositiveSmallIntegerField()),
-                ('icd10', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='daftar_assessment', to='rekam_medis.icd10', verbose_name='ICD10')),
-                ('rekam_medis', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='daftar_assessment', to='rekam_medis.rekammedis')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("regio", models.PositiveSmallIntegerField()),
+                ("gigi", models.PositiveSmallIntegerField()),
+                (
+                    "icd10",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="daftar_assessment",
+                        to="rekam_medis.icd10",
+                        verbose_name="ICD10",
+                    ),
+                ),
+                (
+                    "rekam_medis",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="daftar_assessment",
+                        to="rekam_medis.rekammedis",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='RekamMedisTambahan',
+            name="RekamMedisTambahan",
             fields=[
-                ('rekam_medis', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to='rekam_medis.rekammedis')),
-                ('berat', models.PositiveSmallIntegerField()),
-                ('daftar_alergi', models.ManyToManyField(related_name='daftar_rekam_medis_tambahan', to='rekam_medis.alergi')),
-                ('daftar_penyakit', models.ManyToManyField(related_name='daftar_rekam_medis_tambahan', to='rekam_medis.penyakit')),
+                (
+                    "rekam_medis",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        primary_key=True,
+                        serialize=False,
+                        to="rekam_medis.rekammedis",
+                    ),
+                ),
+                ("berat", models.PositiveSmallIntegerField()),
+                (
+                    "daftar_alergi",
+                    models.ManyToManyField(
+                        related_name="daftar_rekam_medis_tambahan",
+                        to="rekam_medis.alergi",
+                    ),
+                ),
+                (
+                    "daftar_penyakit",
+                    models.ManyToManyField(
+                        related_name="daftar_rekam_medis_tambahan",
+                        to="rekam_medis.penyakit",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='PembayaranTransfer',
+            name="PembayaranTransfer",
             fields=[
-                ('pembayaran', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to='rekam_medis.pembayaran')),
-                ('nama', models.CharField(max_length=256)),
-                ('no_rek', models.CharField(max_length=32, verbose_name='No. Rekening')),
-                ('dikonfirmasi', models.BooleanField(default=False)),
-                ('waktu_dikonfirmasi', models.DateTimeField(null=True)),
-                ('dikonfirmasi_oleh', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='mengonfirmasi_transfer', to=settings.AUTH_USER_MODEL)),
+                (
+                    "pembayaran",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        primary_key=True,
+                        serialize=False,
+                        to="rekam_medis.pembayaran",
+                    ),
+                ),
+                ("nama", models.CharField(max_length=256)),
+                (
+                    "no_rek",
+                    models.CharField(max_length=32, verbose_name="No. Rekening"),
+                ),
+                ("dikonfirmasi", models.BooleanField(default=False)),
+                ("waktu_dikonfirmasi", models.DateTimeField(null=True)),
+                (
+                    "dikonfirmasi_oleh",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="mengonfirmasi_transfer",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AddConstraint(
-            model_name='pembayaranbagihasil',
-            constraint=models.UniqueConstraint(fields=('pembayaran', 'plan_tindakan'), name='unique_pembayaran_plan_tindakan'),
+            model_name="pembayaranbagihasil",
+            constraint=models.UniqueConstraint(
+                fields=("pembayaran", "plan_tindakan"),
+                name="unique_pembayaran_plan_tindakan",
+            ),
         ),
     ]

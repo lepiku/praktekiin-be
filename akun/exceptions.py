@@ -3,9 +3,8 @@ from rest_framework.exceptions import ErrorDetail, status
 
 
 def replace_error_detail(response, status, code, new_message):
-    if (response.status_code == status
-            and response.data['detail'].code == code):
-        response.data['detail'] = ErrorDetail(new_message, code)
+    if response.status_code == status and response.data["detail"].code == code:
+        response.data["detail"] = ErrorDetail(new_message, code)
 
     return response
 
@@ -17,12 +16,14 @@ def custom_exception_handler(exc, context):
         response = replace_error_detail(
             response,
             status.HTTP_401_UNAUTHORIZED,
-            'not_authenticated',
-            'Token autentikasi tidak diberikan.')
+            "not_authenticated",
+            "Token autentikasi tidak diberikan.",
+        )
         response = replace_error_detail(
             response,
             status.HTTP_401_UNAUTHORIZED,
-            'authentication_failed',
-            'Salah token.')
+            "authentication_failed",
+            "Salah token.",
+        )
 
     return response
