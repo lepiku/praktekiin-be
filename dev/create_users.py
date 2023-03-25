@@ -7,7 +7,7 @@ dimas = {
     'password': 'asdf1234',
     'nama_panggilan': 'Dimas',
     'no_hp': '081122334450',
-    'peran': Pengguna.Peran.DOKTER_GIGI
+    'peran': Pengguna.Peran.STAF_ADMINISTRASI
 }
 Pengguna.objects.create_superuser(**dimas)
 

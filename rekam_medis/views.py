@@ -4,16 +4,17 @@ from rest_framework.response import Response
 from rekam_medis.models import Pasien
 from rekam_medis.serializers import PasienSerializer
 from rest_framework.pagination import PageNumberPagination
-
-
-class PasienListPagination(PageNumberPagination):
-    page_size = 20
+from praktekiin.permissions import CustomModelPermissions
 
 
 class PasienViewSet(viewsets.ModelViewSet):
-    queryset = Pasien.objects.all().order_by('-id')
+    class PasienListPagination(PageNumberPagination):
+        page_size = 20
+
+    queryset = Pasien.objects.all().order_by("-id")
     serializer_class = PasienSerializer
     pagination_class = PasienListPagination
+    permission_classes = [CustomModelPermissions]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -28,7 +29,9 @@ class PasienViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(pasien)
 
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
