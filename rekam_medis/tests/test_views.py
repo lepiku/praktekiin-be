@@ -4,6 +4,7 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APITestCase
 
+from akun.models import Pengguna
 from praktekiin.test import create_pengguna_and_masuk
 from rekam_medis.models import Pasien
 from rekam_medis.serializers import PasienSerializer
@@ -13,8 +14,14 @@ class PasienAPITestCase(APITestCase):
     url = "/rekam_medis/pasien/"
 
     def setUp(self):
-        login_data = {"username": "dimas", "password": "d"}
-        self.pengguna = create_pengguna_and_masuk(self.client, login_data)
+        pengguna_data = {
+            "username": "dimas",
+            "password": "asdf1234",
+            "nama_panggilan": "Dimas",
+            "no_hp": "081122334450",
+            "peran": Pengguna.Peran.STAF_ADMINISTRASI,
+        }
+        self.pengguna = create_pengguna_and_masuk(self.client, pengguna_data)
 
         pasien = Pasien.objects.create(
             nama="Dimas",

@@ -1,9 +1,9 @@
 # require create_users.py
-from rekam_medis.models import Pasien
 from akun.models import Pengguna
+from rekam_medis.models import Pasien
 
 user = Pengguna.objects.get(username="dimas")
-pasien = Pasien.objects.create(
+pasien, _ = Pasien.objects.get_or_create(
     nama="Okto",
     jenis_kelamin="l",
     nama_kk="Ayahnya Okto",
