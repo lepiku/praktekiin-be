@@ -1,10 +1,10 @@
 from rest_framework import status, viewsets
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
+from praktekiin.permissions import CustomModelPermissions
 from rekam_medis.models import Pasien
 from rekam_medis.serializers import PasienSerializer
-from rest_framework.pagination import PageNumberPagination
-from praktekiin.permissions import CustomModelPermissions
 
 
 class PasienViewSet(viewsets.ModelViewSet):

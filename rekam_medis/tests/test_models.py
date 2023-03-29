@@ -1,4 +1,5 @@
 from django.test import TestCase
+
 from rekam_medis.models import Pasien
 
 

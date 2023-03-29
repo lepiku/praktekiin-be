@@ -1,5 +1,5 @@
-from rest_framework.views import exception_handler
 from rest_framework.exceptions import ErrorDetail, status
+from rest_framework.views import exception_handler
 
 
 def replace_error_detail(response, status, code, new_message):
