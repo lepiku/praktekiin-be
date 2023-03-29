@@ -14,7 +14,6 @@ import os
 import sys
 from pathlib import Path
 
-import dj_database_url
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -104,9 +103,7 @@ WSGI_APPLICATION = "praktekiin.wsgi.application"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    "default": dj_database_url.config(
-        "DATABASE_URL", default=f'sqlite:///{BASE_DIR / "db.sqlite3"}'
-    )
+    "default": env.db(),
 }
 
 if env("DJANGO_PRODUCTION"):

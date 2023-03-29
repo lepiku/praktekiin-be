@@ -20,12 +20,17 @@ dependencies:
   - gunicorn=20.1.0=py39hf3d152e_2
   - importlib-metadata=6.1.0=pyha770c72_0
   - isort=5.12.0=pyhd8ed1ab_1
+  - keyutils=1.6.1=h166bdaf_0
+  - krb5=1.20.1=h81ceb04_0
   - ld_impl_linux-64=2.40=h41732ed_0
+  - libedit=3.1.20191231=he28a2e2_2
   - libffi=3.4.2=h7f98852_5
   - libgcc-ng=12.2.0=h65d4601_19
   - libgomp=12.2.0=h65d4601_19
   - libnsl=2.0.0=h7f98852_0
+  - libpq=15.2=hb675445_0
   - libsqlite=3.40.0=h753d276_0
+  - libstdcxx-ng=12.2.0=h46fd767_19
   - libuuid=2.32.1=h7f98852_1000
   - libzlib=1.2.13=h166bdaf_4
   - markdown=3.3.6=pyhd8ed1ab_0
@@ -36,7 +41,9 @@ dependencies:
   - pathspec=0.11.1=pyhd8ed1ab_0
   - pip=23.0.1=pyhd8ed1ab_0
   - platformdirs=3.2.0=pyhd8ed1ab_0
-  - python=3.9.10=hc74c709_2_cpython
+  - psycopg2=2.9.3=py39h24a400a_2
+  - psycopg2-binary=2.9.3=pyhd8ed1ab_2
+  - python=3.9.16=h2782a2a_0_cpython
   - python_abi=3.9=3_cp39
   - pytz=2023.2=pyhd8ed1ab_0
   - readline=8.2=h8228510_1
@@ -53,7 +60,4 @@ dependencies:
   - whitenoise=5.3.0=pyhd8ed1ab_0
   - xz=5.2.6=h166bdaf_0
   - zipp=3.15.0=pyhd8ed1ab_0
-  - pip:
-      - dj-database-url==0.5.0
-      - psycopg2-binary==2.9.3
 prefix: /home/dimas/.conda/envs/iin
