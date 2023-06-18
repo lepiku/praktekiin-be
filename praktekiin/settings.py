@@ -31,7 +31,7 @@ env = environ.Env(
 ENV_PATH = (BASE_DIR / ".env").as_posix()
 TESTING = sys.argv[1] == "test"
 if TESTING:
-    environ.Env.read_env((BASE_DIR / ".env.test").as_posix())
+    environ.Env.read_env((BASE_DIR / ".test.env").as_posix())
 elif os.path.exists(ENV_PATH):
     environ.Env.read_env(ENV_PATH)
 
