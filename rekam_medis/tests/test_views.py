@@ -11,7 +11,7 @@ from rekam_medis.serializers import PasienSerializer
 
 
 class PasienAPITestCase(APITestCase):
-    url = "/rekam_medis/pasien/"
+    url = "/rekam-medis/pasien/"
 
     def setUp(self):
         pengguna_data = {

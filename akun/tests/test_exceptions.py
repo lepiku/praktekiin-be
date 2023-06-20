@@ -3,7 +3,7 @@ from rest_framework.test import APITestCase
 
 
 class AkunExceptionsTestCase(APITestCase):
-    url = "/rekam_medis/pasien/"
+    url = "/rekam-medis/pasien/"
 
     def test_unauthorized(self):
         response = self.client.get(self.url)
