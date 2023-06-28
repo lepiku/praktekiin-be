@@ -1,10 +1,13 @@
+from urllib.parse import parse_qs, urlparse
+
 from rest_framework import status, viewsets
+from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 from praktekiin.permissions import CustomModelPermissions
 from rekam_medis.models import Pasien
-from rekam_medis.serializers import PasienSerializer
+from rekam_medis.serializers import PasienSerializer, SearchSerializer
 
 
 class PasienViewSet(viewsets.ModelViewSet):
@@ -41,3 +44,18 @@ class PasienViewSet(viewsets.ModelViewSet):
         instance.diubah_oleh = request.user
         instance.save()
         return super().update(request, *args, **kwargs)
+
+
+@api_view()
+def search(request):
+    query = parse_qs(urlparse(request.get_full_path()).query)
+    for key in query:
+        if len(query[key]) == 1:
+            query[key] = query[key][0]
+
+    search = SearchSerializer(data=query)
+    search.is_valid(raise_exception=True)
+
+    pasiens = Pasien.objects.filter(nama__contains=search.validated_data["q"])
+    serializer = PasienSerializer(pasiens, many=True)
+    return Response({"pasien": serializer.data})
