@@ -13,3 +13,7 @@ class PasienSerializer(serializers.ModelSerializer):
             "waktu_dibuat",
             "waktu_diubah",
         ]
+
+
+class SearchSerializer(serializers.Serializer):
+    q = serializers.CharField()
