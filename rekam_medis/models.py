@@ -90,7 +90,7 @@ class Perjanjian(models.Model):
     )
     tanggal = models.DateField()
     waktu_mulai = models.TimeField()
-    waktu_selesai = models.TimeField()
+    waktu_selesai = models.TimeField(null=True, blank=True)
     keluhan = models.TextField()
 
     waktu_dibuat = models.DateTimeField(auto_now_add=True)
@@ -108,6 +108,9 @@ class Perjanjian(models.Model):
         on_delete=models.SET_NULL,
     )
     diarsipkan = models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        return f"{self.pasien} - {self.tanggal}"
 
 
 class RekamMedis(models.Model):
