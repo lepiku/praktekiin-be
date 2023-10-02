@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 
 from akun.models import Pengguna
-from rekam_medis.models import Pasien
+from rekam_medis.models import Pasien, Perjanjian
 
 
 def create_pengguna_and_masuk(client, pengguna_data):
@@ -21,11 +21,17 @@ def create_pengguna_and_masuk(client, pengguna_data):
     return pengguna
 
 
+def get_model_permission(model):
+    return Permission.objects.filter(
+        content_type=ContentType.objects.get_for_model(model)
+    )
+
+
 def set_group(pengguna):
     if pengguna.peran == Pengguna.Peran.STAF_ADMINISTRASI:
-        crud_pasien = Permission.objects.filter(
-            content_type=ContentType.objects.get_for_model(Pasien)
-        )
         group_stafadmin, _ = Group.objects.get_or_create(name="Staf Administrasi")
-        group_stafadmin.permissions.set(crud_pasien)
+        group_stafadmin.permissions.set(
+            get_model_permission(Pasien) | get_model_permission(Perjanjian)
+        )
+        group_stafadmin.permissions
         pengguna.groups.set([group_stafadmin])
