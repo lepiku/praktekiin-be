@@ -20,8 +20,10 @@ class SearchSerializer(serializers.Serializer):
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
-    nama_pasien = serializers.CharField(source="pasien.nama")
-    nama_dokter_gigi = serializers.CharField(source="dokter_gigi.nama_panggilan")
+    nama_pasien = serializers.CharField(source="pasien.nama", read_only=True)
+    nama_dokter_gigi = serializers.CharField(
+        source="dokter_gigi.nama_panggilan", read_only=True
+    )
 
     class Meta:
         model = Perjanjian

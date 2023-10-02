@@ -39,6 +39,7 @@ class PasienViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.diubah_oleh = request.user
+        instance.dikelola_oleh.add(request.user)
         instance.save()
         return super().update(request, *args, **kwargs)
 

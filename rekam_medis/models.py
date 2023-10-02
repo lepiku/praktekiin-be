@@ -74,11 +74,13 @@ class Pasien(models.Model):
 
 class Perjanjian(models.Model):
     class Status(models.TextChoices):
-        MENUNGGU_KONFIRMASI = "menunggu", "Menunggu Konfirmasi"
+        MENUNGGU = "menunggu", "Menunggu Konfirmasi"
         TERJADWAL = "terjadwal", "Terjadwal"
         SELESAI = "selesai", "Selesai"
 
-    status = models.CharField(max_length=16, choices=Status.choices)
+    status = models.CharField(
+        max_length=16, choices=Status.choices, default=Status.MENUNGGU
+    )
     pasien = models.ForeignKey(
         Pasien, related_name="daftar_perjanjian", on_delete=models.CASCADE
     )

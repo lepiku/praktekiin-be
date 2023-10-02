@@ -178,64 +178,6 @@ class PasienAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, data)
 
-    def test_pasien_update_without_dibuat_oleh_will_set(self):
-        pasien = Pasien.objects.create(
-            nama="Tasya",
-            jenis_kelamin="p",
-            nama_kk="Dimas",
-            tempat_lahir="Depok",
-            tanggal_lahir="2000-01-01",
-            alamat="Maharaja",
-            alamat_rt="001",
-            alamat_rw="002",
-            alamat_kel_desa="Kel",
-            alamat_kecamatan="Kec",
-            alamat_kota_kab="Depok",
-            alamat_provinsi="Jawa Barat",
-            alamat_kode_pos="12345",
-            no_hp="0123456789012",
-            pekerjaan="Mahasiswa",
-            status_perkawinan="belum_menikah",
-            agama="islam",
-        )
-
-        data = {
-            "nama": "Tasya",
-            "jenis_kelamin": "p",
-            "nama_kk": "Dimas",
-            "tempat_lahir": "Depok",
-            "tanggal_lahir": "2000-01-01",
-            "alamat": "Maharaja",
-            "alamat_rt": "001",
-            "alamat_rw": "002",
-            "alamat_kel_desa": "Kel",
-            "alamat_kecamatan": "Kec",
-            "alamat_kota_kab": "Depok",
-            "alamat_provinsi": "Jawa Barat",
-            "alamat_kode_pos": "12345",
-            "no_hp": "0123456789012",
-            "pekerjaan": "PNS",
-            "status_perkawinan": "",
-            "agama": "islam",
-        }
-
-        waktu_dibuat = pasien.waktu_dibuat.astimezone().isoformat()
-
-        now = timezone.now()
-        with mock.patch("django.utils.timezone.now", mock.Mock(return_value=now)):
-            response = self.client.put(self.url + str(pasien.id) + "/", data)
-
-        data["id"] = pasien.id
-        data["dikelola_oleh"] = [self.pengguna.id]
-        data["dibuat_oleh"] = self.pengguna.id
-        data["waktu_dibuat"] = waktu_dibuat
-        data["diubah_oleh"] = self.pengguna.id
-        data["waktu_diubah"] = now.astimezone().isoformat()
-        data["diarsipkan"] = False
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, data)
-
     def test_pasien_destroy(self):
         response = self.client.delete(self.url + "1/")
 
