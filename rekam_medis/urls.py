@@ -7,6 +7,6 @@ router = DefaultRouter()
 router.register(r"pasien", PasienViewSet)
 router.register(r"perjanjian", AppointmentViewSet)
 
-urlpatterns = router.urls + [
+urlpatterns = [
     path("search/", search, name="search"),
-]
+] + router.urls

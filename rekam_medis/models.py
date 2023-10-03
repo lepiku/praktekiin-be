@@ -84,16 +84,18 @@ class Perjanjian(models.Model):
     pasien = models.ForeignKey(
         Pasien, related_name="daftar_perjanjian", on_delete=models.CASCADE
     )
+    keluhan = models.TextField()
+    tanggal = models.DateField()
     dokter_gigi = models.ForeignKey(
         "akun.Pengguna",
         related_name="daftar_perjanjian",
         null=True,
         on_delete=models.SET_NULL,
     )
-    tanggal = models.DateField()
-    waktu_mulai = models.TimeField()
-    waktu_selesai = models.TimeField(null=True, blank=True)
-    keluhan = models.TextField()
+    catatan = models.CharField(max_length=64, blank=True)
+
+    estimasi_durasi = models.IntegerField(null=True, blank=True)
+    waktu_mulai = models.TimeField(null=True, blank=True)
 
     waktu_dibuat = models.DateTimeField(auto_now_add=True)
     dibuat_oleh = models.ForeignKey(
