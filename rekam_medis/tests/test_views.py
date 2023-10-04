@@ -1,4 +1,3 @@
-import pprint
 from unittest import mock
 
 from django.utils import timezone
@@ -6,7 +5,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from akun.models import Pengguna
-from praktekiin.test import create_pengguna_and_masuk
+from praktekiin.test import create_account, create_account_and_login
 from rekam_medis.models import Pasien, Perjanjian
 from rekam_medis.serializers import PasienSerializer
 
@@ -22,7 +21,7 @@ class PasienAPITestCase(APITestCase):
             "no_hp": "081122334450",
             "peran": Pengguna.Peran.STAF_ADMINISTRASI,
         }
-        self.pengguna = create_pengguna_and_masuk(self.client, pengguna_data)
+        self.pengguna = create_account_and_login(self.client, pengguna_data)
 
         pasien = Pasien.objects.create(
             nama="Dimas",
@@ -197,7 +196,16 @@ class AppointmentAPITestCase(APITestCase):
             "no_hp": "081122334450",
             "peran": Pengguna.Peran.STAF_ADMINISTRASI,
         }
-        self.pengguna = create_pengguna_and_masuk(self.client, pengguna_data)
+        self.pengguna = create_account_and_login(self.client, pengguna_data)
+
+        dentist_data = {
+            "username": "doktergigi",
+            "password": "asdf1234",
+            "nama_panggilan": "drg. Iin",
+            "no_hp": "081122112211",
+            "peran": Pengguna.Peran.DOKTER_GIGI,
+        }
+        self.dentist = create_account(dentist_data)
 
         self.pasien = Pasien.objects.create(
             nama="Dimas",
@@ -224,9 +232,9 @@ class AppointmentAPITestCase(APITestCase):
     def test_create_only_with_required_fields(self):
         data = {
             "pasien": self.pasien.id,
+            "keluhan": "Gigi sakit untuk menelan",
             "tanggal": "2023-10-02",
             "waktu_mulai": "10:00:00",
-            "keluhan": "Gigi sakit untuk menelan",
         }
 
         now = timezone.now()
@@ -234,9 +242,11 @@ class AppointmentAPITestCase(APITestCase):
             response = self.client.post(self.url, data)
 
         expected_response = data | {
+            "catatan": "",
             "diarsipkan": False,
             "dibuat_oleh": self.pengguna.id,
             "diubah_oleh": self.pengguna.id,
+            "estimasi_durasi": None,
             "dokter_gigi": None,
             "id": 1,
             "nama_pasien": self.pasien.nama,
@@ -244,10 +254,39 @@ class AppointmentAPITestCase(APITestCase):
             "status": Perjanjian.Status.MENUNGGU.value,
             "waktu_dibuat": now.astimezone().isoformat(),
             "waktu_diubah": now.astimezone().isoformat(),
-            "waktu_selesai": None,
         }
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        pprint.pprint(response.data)
-        pprint.pprint(expected_response)
+        self.assertEqual(response.data, expected_response)
+
+    def test_create_with_required_and_optional_fields(self):
+        data = {
+            "pasien": self.pasien.id,
+            "tanggal": "2023-10-02",
+            "waktu_mulai": "10:00:00",
+            "keluhan": "Gigi sakit untuk menelan",
+            "dokter_gigi": self.dentist.id,
+        }
+
+        now = timezone.now()
+        with mock.patch("django.utils.timezone.now", mock.Mock(return_value=now)):
+            response = self.client.post(self.url, data)
+
+        expected_response = data | {
+            "catatan": "",
+            "diarsipkan": False,
+            "dibuat_oleh": self.pengguna.id,
+            "diubah_oleh": self.pengguna.id,
+            "estimasi_durasi": None,
+            "dokter_gigi": self.dentist.id,
+            "id": 1,
+            "nama_dokter_gigi": self.dentist.nama_panggilan,
+            "nama_pasien": self.pasien.nama,
+            "pasien": self.pasien.id,
+            "status": Perjanjian.Status.MENUNGGU.value,
+            "waktu_dibuat": now.astimezone().isoformat(),
+            "waktu_diubah": now.astimezone().isoformat(),
+        }
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data, expected_response)

@@ -1,3 +1,6 @@
+import difflib
+import pprint
+
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
@@ -6,19 +9,35 @@ from akun.models import Pengguna
 from rekam_medis.models import Pasien, Perjanjian
 
 
-def create_pengguna_and_masuk(client, pengguna_data):
-    pengguna = Pengguna.objects.create_user(**pengguna_data)
-    set_group(pengguna)
+def print_dict_diff(d1, d2):
+    print(
+        "\n"
+        + "\n".join(
+            difflib.ndiff(
+                pprint.pformat(d1).splitlines(), pprint.pformat(d2).splitlines()
+            )
+        )
+    )
+
+
+def create_account(account_data):
+    account = Pengguna.objects.create_user(**account_data)
+    set_group(account)
+    return account
+
+
+def create_account_and_login(client, account_data):
+    account = create_account(account_data)
 
     token = client.post(
         reverse("masuk"),
         {
-            "username": pengguna_data["username"],
-            "password": pengguna_data["password"],
+            "username": account_data["username"],
+            "password": account_data["password"],
         },
     ).data["token"]
     client.credentials(HTTP_AUTHORIZATION=f"Token {token}")
-    return pengguna
+    return account
 
 
 def get_model_permission(model):
