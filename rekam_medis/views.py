@@ -1,17 +1,14 @@
 from urllib.parse import parse_qs, urlparse
 
+from django_filters import rest_framework as filters
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 from praktekiin.permissions import CustomModelPermissions
-from rekam_medis.models import Pasien, Perjanjian
-from rekam_medis.serializers import (
-    AppointmentSerializer,
-    PasienSerializer,
-    SearchSerializer,
-)
+
+from .models import Pasien, Perjanjian
+from .serializers import AppointmentSerializer, PasienSerializer, SearchSerializer
 
 
 class PasienViewSet(viewsets.ModelViewSet):
@@ -48,6 +45,12 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Perjanjian.objects.all().order_by("-id")
     serializer_class = AppointmentSerializer
     permission_classes = [CustomModelPermissions]
+
+    class AppointmentFilter(filters.FilterSet):
+        tanggal_exact = filters.DateFilter(field_name="tanggal")
+        tanggal = filters.DateFromToRangeFilter()
+
+    filterset_class = AppointmentFilter
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
